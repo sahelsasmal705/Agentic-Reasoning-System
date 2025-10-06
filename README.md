@@ -1,4 +1,4 @@
-# Hackathon Round 1 Submission
+# Agentic-Reasoning-System:- Hackathon Round 1 Submission
 
 ##  Overview
 This project solves reasoning and math-based multiple-choice questions by predicting the correct option using a machine learning pipeline.  
@@ -37,7 +37,7 @@ Math-Solver/
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/sahelsasmal705/Math-solver.git
+   git clone https://github.com/sahelsasmal705/Agentic-Reasoning-System.git
    cd Math-solver
  
    ---
