@@ -1,38 +1,9 @@
-"""
-MIT License
+# streamlit_app.py
+# MIT License (c) 2025 Sahel
+# Streamlit UI for Agentic Reasoning Math Solver (adapted from Flask version)
+# Run: pip install streamlit sympy
+# Start: streamlit run streamlit_app.py
 
-Copyright (c) 2025 Sahel
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-main_expanded.py — Agentic Reasoning Chat (All-in-one, STEM)
-
-This is an expanded copy of your main.py with broad-topic scaffolding for:
-- Mathematics: basic → advanced (arithmetic, algebra, geometry, calculus, linear algebra)
-- Physics: kinematics, basic dynamics, ideal gas scaffold
-- Chemistry: mole/molar-mass scaffold and stoichiometry guidance
-
-It's intended as a starting scaffold you can copy/paste. Advanced symbolic features
-use sympy when available (optional dependency).
-
-Run: streamlit run  main.py
-"""
 from __future__ import annotations
 
 import ast

@@ -1,0 +1,23 @@
+# Activate env
+import subprocess
+
+from sympy import python
+
+subprocess.call(r'.\venv\Scripts\activate', shell=True)
+
+# Install reqs
+subprocess.call(r'pip install -U pandas scikit-learn joblib tqdm transformers peft accelerate datasets bitsandbytes sentencepiece', shell=True)
+
+
+# Prepare SFT data
+subprocess.call(r'python src\prepare_dataset.py', shell=True)
+
+# Train LoRA LLM
+subprocess.call(r'python src\train_llm_lora.py', shell=True)
+
+# Predict -> output.csv
+subprocess.call(r'python src\predict_llm.py', shell=True)
+
+# (Optional) Evaluate if labels are provided
+subprocess.call(r'python src\evaluate.py --labels data\test_labels.csv', shell=True)
+
