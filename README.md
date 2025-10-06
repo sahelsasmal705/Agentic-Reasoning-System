@@ -1,12 +1,12 @@
-# 🧠 Math-Solver: Hackathon Round 1 Submission
+# Hackathon Round 1 Submission
 
-## 📌 Overview
+##  Overview
 This project solves reasoning and math-based multiple-choice questions by predicting the correct option using a machine learning pipeline.  
 It uses **TF-IDF for feature extraction** and **Logistic Regression for classification**.
 
 ---
 
-## ✅ Problem Statement
+##  Problem Statement
 Given:
 - `train.csv` → Contains questions, options, and correct answers.
 - `test.csv` → Contains questions and options without correct answers.
@@ -17,7 +17,7 @@ Goal:
 
 ---
 
-## 📂 Folder Structure
+##  Folder Structure
 
 Math-Solver/
 ├─ data/
@@ -34,7 +34,7 @@ Math-Solver/
 
 ---
 
-## ⚙️ Installation
+## Installation
 1. Clone the repository:
    ```bash
    git clone https://github.com/sahelsasmal705/Math-solver.git
@@ -42,7 +42,7 @@ Math-Solver/
  
    ---
 
-✅ Copy this into your **README.md**, save, then run:
+**README.md**, save, then run:
 ```powershell
 git add README.md
 git commit -m "Updated README"
