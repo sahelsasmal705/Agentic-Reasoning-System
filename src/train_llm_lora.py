@@ -7,7 +7,7 @@ from transformers import (
     BitsAndBytesConfig,
     Trainer, TrainingArguments, DataCollatorForLanguageModeling
 )
-from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training # type: ignore # type: ignore
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"

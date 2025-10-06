@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 import pandas as pd
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from peft import PeftModel
+from peft import PeftModel # type: ignore
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
