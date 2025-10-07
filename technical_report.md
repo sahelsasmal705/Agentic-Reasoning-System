@@ -82,26 +82,12 @@ src/
 ### 4.1 Metrics  
 - **Accuracy**: *your accuracy on validation / test*  
 - **Macro F1 Score**: *your macro F1*  
-- (Optional) Per-class precision, recall  
-- Confusion matrix  
-
-Example:
+ 
 
 | Metric      | Value     |
 |-------------|-----------|
 | Accuracy    | 0.2468    |
 | Macro F1    | 0.1746    |
-
-### 4.2 Error Analysis  
-We sampled **100 incorrect predictions** and categorized error types:
-
-| Error Type                | Count | Description & Insights |
-|---------------------------|-------|--------------------------|
-| Arithmetic miscalculation | 30    | Symbolic solver failed on nested expressions |
-| Distractor-linguistic trap | 25    | Options with rewording confuse TF-IDF features |
-| Multi-step reasoning chain | 20   | Needs multi-step decomposition but model lacks it |
-| Token overlap bias         | 15    | Model picks option with more overlapping tokens even when wrong |
-| Others / noisy questions   | 10    | Ambiguous or ill-posed questions |
 
 From analysis, improvements can target:
 - Better symbolic handling for multi-step arithmetic  
