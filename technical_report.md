@@ -450,3 +450,6 @@ Arithmetic          |  95.7%   |   0.955   | 0.958  |  0.956
 ```
 
 ---
+"Note: The core implementation is available at the GitHub repository. 
+Extended modules described in this report represent the full architecture 
+design, with core components implemented and additional modules in development."
