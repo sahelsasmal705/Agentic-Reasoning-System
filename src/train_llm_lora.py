@@ -1,7 +1,7 @@
 # src/train_llm_lora.py
 import json, math
 from pathlib import Path
-from datasets import load_dataset
+from datasets import load_dataset # type: ignore
 from transformers import (
     AutoTokenizer, AutoModelForCausalLM,
     BitsAndBytesConfig,

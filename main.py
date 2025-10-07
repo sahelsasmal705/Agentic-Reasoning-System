@@ -2,7 +2,7 @@
 # MIT License (c) 2025 Sahel
 # Streamlit UI for Agentic Reasoning Math Solver (adapted from Flask version)
 # Run: pip install streamlit sympy
-# Start: streamlit run streamlit_app.py
+# Start: streamlit run streamlit_main.py
 
 from __future__ import annotations
 
