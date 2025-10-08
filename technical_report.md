@@ -34,22 +34,6 @@ Our system combines a machine learning model (e.g. TF-IDF + classifier) with too
 6. **Reasoning Trace Generation**  
    - For each prediction, log a small trace: feature contributions, tool results, decision reasoning  
 
-# Product_Dataset
-
-This folder contains test datasets used for product behavior analysis.
-
-## Contents
-
--#`product_Dataset/`
-campus_card_swipes.csv
-face_embeddings.csv
-wifi_logs.csv
-cctv_frames.csv
-free text notes.csv
-lab bookings.csv
-library checkouts.csv
-
-
 ### 2.2 Module Structure  
 src/
 ├ train_model.py
