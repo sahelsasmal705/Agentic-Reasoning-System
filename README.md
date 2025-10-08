@@ -11,8 +11,8 @@ An ML-based system for solving reasoning and math MCQs using TF-IDF, classificat
 - Tool integration for arithmetic
 
 ## Performance
-- Accuracy: [~0.2468]
-- Macro F1: [~0.1746]
+- Accuracy: [~0.2812 ]
+- Macro F1: [~0.2131 ]
 
 ## Architecture
 [# 2.1 Overall Pipeline  
