@@ -60,6 +60,22 @@ Math-Solver/
 └─ model.pkl             # Saved trained model
 
 ---
+# Product_Dataset
+
+This folder contains test datasets used for product behavior analysis.
+
+## Contents
+
+-#`product_Dataset/`
+ campus_card_swipes.csv
+face_embeddings.csv
+wifi_logs.csv
+cctv_frames.csv
+free text notes.csv
+lab bookings.csv
+library checkouts.csv
+  - 
+
 
 ## Installation
 1. Clone the repository:
