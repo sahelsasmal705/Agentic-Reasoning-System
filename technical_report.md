@@ -101,8 +101,8 @@ src/
 
 | Metric      | Value     |
 |-------------|-----------|
-| Accuracy    | 0.2812    |
-| Macro F1    | 0.2131    |
+| Accuracy    | 0.2468    |
+| Macro F1    | 0.1746    |
 
 From analysis, improvements can target:
 - Better symbolic handling for multi-step arithmetic  

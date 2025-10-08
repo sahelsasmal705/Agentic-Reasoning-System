@@ -11,8 +11,8 @@ An ML-based system for solving reasoning and math MCQs using TF-IDF, classificat
 - Tool integration for arithmetic
 
 ## Performance
-- Accuracy: [~0.2812 ]
-- Macro F1: [~0.2131 ]
+- Accuracy: [~0.2468   ]
+- Macro F1  [ 0.1746   ]
 
 ## Architecture
 [# 2.1 Overall Pipeline  
@@ -59,22 +59,7 @@ Math-Solver/
 ├─ README.md             # Project documentation
 └─ model.pkl             # Saved trained model
 
----
-# Product_Dataset
 
-This folder contains test datasets used for product behavior analysis.
-
-## Contents
-
--#`product_Dataset/`
- campus_card_swipes.csv
-face_embeddings.csv
-wifi_logs.csv
-cctv_frames.csv
-free text notes.csv
-lab bookings.csv
-library checkouts.csv
-  - 
 
 
 ## Installation
