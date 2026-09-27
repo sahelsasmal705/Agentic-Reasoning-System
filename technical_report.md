@@ -113,6 +113,42 @@ We ran experiments to measure the impact of each component:
 - Average inference time per question (all options): ~ *X* ms  
 - Model load time: ~ *Y* seconds  
 
+### 4.5 Technical Validation Tests
+
+The solver was tested on the Python 3.14.2 environment used by the application, with SymPy 1.14.0 installed. The test command exercised the planner, dispatcher, and topic handlers directly:
+
+```powershell
+python main.py --run-tests
+```
+
+The built-in test suite completed with:
+
+```text
+Running unit tests...
+All tests passed.
+```
+
+An additional focused validation covered the recently implemented symbolic and physics paths. Each case was required to return a successful result and the expected key value.
+
+| Test | Input type | Expected result | Status |
+|---|---|---|---|
+| Arithmetic | `2+3*4` | `14` | PASS |
+| Percentage | `20% of 150` | `30` | PASS |
+| Integral | `∫x2exdx` | Successful symbolic integral | PASS |
+| Matrix inverse | 2x2 LaTeX `pmatrix` | Determinant of inverse equals `1` | PASS |
+| Extrema | Cubic function on `0<=x<=3` | Endpoints and critical points evaluated | PASS |
+| Convex lens | Object distance `20 cm`, focal length `10 cm` | Image distance `20 cm` | PASS |
+
+Focused validation output:
+
+```text
+{'arithmetic': True, 'percentage': True, 'integral': True,
+ 'matrix_inverse': True, 'extrema': True, 'lens': True}
+All focused technical checks passed.
+```
+
+These tests validate the implemented handlers and representative input formats. They do not establish broad coverage for every keyword listed in the planner; topics without a dedicated handler remain scaffolding and should be tested separately when implemented.
+
 ---
 
 ## 5. Limitations & Future Work  
