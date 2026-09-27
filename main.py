@@ -93,6 +93,8 @@ SUBJECT_KEYWORDS = {
         "electricity",
         "magnetism",
         "optics",
+        "lens",
+        "convex lens",
         "thermodynamics",
         "waves",
     ],
@@ -522,6 +524,27 @@ def handle_kinematics(text: str) -> Dict[str, Any]:
     return {"ok": False, "answer": None, "explanation": ["Kinematics parser too simple; please provide numeric values with labels."]}
 
 
+def handle_lens(text: str) -> Dict[str, Any]:
+    values = [float(value) for value in RE_NUMBER.findall(text)]
+    if len(values) < 2:
+        return {"ok": False, "answer": None, "explanation": ["Provide the object distance and focal length."]}
+
+    object_distance, focal_length = values[0], values[1]
+    if focal_length == 0 or object_distance == focal_length:
+        return {"ok": False, "answer": None, "explanation": ["The focal length and object distance must produce a finite image."]}
+
+    # Cartesian sign convention: convex lens f > 0 and an object in front has u < 0.
+    u = -object_distance
+    v = 1 / (1 / focal_length + 1 / u)
+    magnification = v / u
+    nature = "real, inverted, and same size" if magnification < 0 and abs(abs(magnification) - 1) < 1e-9 else "real and inverted" if magnification < 0 else "virtual and upright"
+    return {
+        "ok": True,
+        "answer": {"image_distance_cm": round(v, 6), "magnification": round(magnification, 6), "nature": nature},
+        "explanation": [f"Using 1/f = 1/v - 1/u with f={focal_length} cm and u={u} cm."],
+    }
+
+
 def handle_ideal_gas(text: str) -> Dict[str, Any]:
     # expect inputs like P V n T; rough parse
     vals = RE_NUMBER.findall(text)
@@ -612,6 +635,8 @@ def solve_subtasks(plan: Dict[str, Any]) -> Dict[str, Any]:
         return {"ok": True, "answer": None, "explanation": ["Advanced math recognized. For symbolic calculus tasks install sympy. I can provide scaffolding and numeric checks."]}
 
     if intent == "physics":
+        if "lens" in text.lower() or "optics" in text.lower():
+            return handle_lens(text)
         if "ideal gas" in text:
             return handle_ideal_gas(text)
         if any(k in text for k in ["speed", "velocity", "distance", "time"]):
