@@ -1,5 +1,5 @@
 # streamlit_app.py
-# MIT License (c) 2025 Sahel
+# MIT License (c) 2026 Sahel
 # Streamlit UI for Agentic Reasoning Math Solver (adapted from Flask version)
 # Run: pip install streamlit sympy
 # Start: streamlit run streamlit_main.py
@@ -117,6 +117,9 @@ RE_NUMBER = re.compile(r"\d+(?:\.\d+)?")
 def _detect_intent(question: str) -> str:
     q = (question or "").lower().strip()
 
+    if "∫" in q or "integral" in q or "integrate" in q:
+        return "integral"
+
     # direct subject detection first
     for intent, keywords in SUBJECT_KEYWORDS.items():
         for k in keywords:
@@ -232,7 +235,6 @@ class SafeEval(ast.NodeVisitor):
         ast.Expression,
         ast.BinOp,
         ast.UnaryOp,
-        ast.Num,
         ast.Constant,
         ast.Call,
         ast.Name,
@@ -278,8 +280,6 @@ class SafeEval(ast.NodeVisitor):
         return self._eval(tree.body) # type: ignore
 
     def _eval(self, node):
-        if isinstance(node, ast.Num):
-            return node.n
         if isinstance(node, ast.Constant):
             if isinstance(node.value, (int, float)):
                 return node.value
@@ -432,6 +432,81 @@ def handle_derivative(text: str) -> Dict[str, Any]:
     return {"ok": False, "answer": None, "explanation": ["Could not parse derivative request."]}
 
 
+def handle_integral(text: str) -> Dict[str, Any]:
+    if not SYMPY_OK:
+        return {"ok": False, "answer": None, "explanation": ["Sympy is required for symbolic integrals."]}
+
+    expression = text.lower().strip().rstrip(".")
+    expression = re.sub(r"^.*?∫", "", expression)
+    expression = re.sub(r"\s*d\s*x\s*$", "", expression)
+    expression = expression.replace("^", "**")
+    expression = expression.replace("ex", "exp(x)")
+    expression = re.sub(r"(?<=\d)x", "*x", expression)
+    expression = re.sub(r"x(?=\d)", "x*", expression)
+    expression = re.sub(r"(?<=\d)(?=exp\()", "*", expression)
+
+    try:
+        x = sp.symbols("x")
+        result = sp.integrate(sp.sympify(expression), x)
+        return {"ok": True, "answer": result, "explanation": [f"Integrated with respect to x: {expression}"]}
+    except Exception as e:
+        return {"ok": False, "answer": None, "explanation": [f"Could not parse the integral: {e}"]}
+
+
+def handle_matrix_inverse(text: str) -> Dict[str, Any]:
+    if not SYMPY_OK:
+        return {"ok": False, "answer": None, "explanation": ["Sympy is required for matrix operations."]}
+
+    matrix_match = re.search(r"pmatrix\}(.*?)end\s*\{\s*pmatrix", text, re.IGNORECASE | re.DOTALL)
+    if not matrix_match:
+        return {"ok": False, "answer": None, "explanation": ["Provide a matrix in LaTeX pmatrix format."]}
+
+    values = re.findall(r"[+-]?\d+(?:\.\d+)?", matrix_match.group(1))
+    if len(values) != 4:
+        return {"ok": False, "answer": None, "explanation": ["Only 2x2 matrices are currently supported."]}
+
+    try:
+        matrix = sp.Matrix(2, 2, [sp.sympify(value) for value in values])
+        return {"ok": True, "answer": matrix.inv(), "explanation": [f"Computed the inverse of {matrix}."]}
+    except Exception as e:
+        return {"ok": False, "answer": None, "explanation": [f"Could not invert the matrix: {e}"]}
+
+
+def handle_extrema(text: str) -> Dict[str, Any]:
+    if not SYMPY_OK:
+        return {"ok": False, "answer": None, "explanation": ["Sympy is required for maximum/minimum problems."]}
+
+    normalized = text.replace("$$", "").replace(r"\(", "").replace(r"\)", "")
+    normalized = normalized.replace(r"\leq", "<=").replace(r"\le", "<=")
+    function_match = re.search(r"f\s*\(\s*x\s*\)\s*=\s*(.+?)(?=\s+on\s+|\s*$)", normalized, re.IGNORECASE | re.DOTALL)
+    interval_match = re.search(r"\(?\s*([+-]?\d+(?:\.\d+)?)\s*<=\s*x\s*<=\s*([+-]?\d+(?:\.\d+)?)\s*\)?", normalized, re.IGNORECASE)
+    if not interval_match:
+        interval_match = re.search(r"\(?\s*([+-]?\d+(?:\.\d+)?)\s*<=\s*x\s*<=\s*([+-]?\d+(?:\.\d+)?)\s*\)?", text, re.IGNORECASE)
+
+    if not function_match or not interval_match:
+        return {"ok": False, "answer": None, "explanation": ["Provide a function such as f(x)=x^3-3*x^2+2 and a closed interval."]}
+
+    try:
+        x = sp.symbols("x")
+        expression = function_match.group(1).replace("^", "**")
+        expression = re.sub(r"(?<=\d)x", "*x", expression)
+        expression = re.sub(r"x(?=\d)", "x*", expression)
+        function = sp.sympify(expression)
+        lower, upper = map(float, interval_match.groups())
+        candidates = [sp.Float(lower), sp.Float(upper)]
+        candidates.extend(root for root in sp.solve(sp.diff(function, x), x) if root.is_real and lower <= float(root) <= upper)
+        values = [(point, sp.simplify(function.subs(x, point))) for point in candidates]
+        minimum = min(values, key=lambda item: float(item[1]))
+        maximum = max(values, key=lambda item: float(item[1]))
+        return {
+            "ok": True,
+            "answer": {"minimum": minimum[1], "at_x": minimum[0], "maximum": maximum[1], "at_x_max": maximum[0]},
+            "explanation": [f"Checked endpoints and critical points: {values}"],
+        }
+    except Exception as e:
+        return {"ok": False, "answer": None, "explanation": [f"Could not parse the function or interval: {e}"]}
+
+
 # Physics handlers (basic kinematics and ideal gas law)
 
 def handle_kinematics(text: str) -> Dict[str, Any]:
@@ -475,6 +550,15 @@ def solve_subtasks(plan: Dict[str, Any]) -> Dict[str, Any]:
     intent = plan.get("intent")
     parsed = plan.get("parsed", {})
     text = plan.get("original_question", "")
+
+    if intent == "integral":
+        return handle_integral(text)
+
+    if intent == "math_advanced" and any(term in text.lower() for term in ("matrix", "matrices", "a^{-1}", "inverse")):
+        return handle_matrix_inverse(text)
+
+    if any(term in text.lower() for term in ("maximum", "minimum", "max value", "min value", "maxima", "minima")):
+        return handle_extrema(text)
 
     # arithmetic/algebra/percentage/proportion/sdt handled by previous implementation
     if intent == "arithmetic":
